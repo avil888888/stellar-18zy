@@ -42,7 +42,7 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         super().start()
         try:
             down_url = 'https://hub.gitmirror.com/https://raw.githubusercontent.com/avil888888/stellar-18zy/refs/heads/main/1.json'
-            r = requests.get(down_url,timeout = 15,verify=False) 
+            r = requests.get(down_url,timeout = 10,verify=False) 
             result = r.status_code
             if result == 200:
                 with open('remote.json','wb') as f:
@@ -80,7 +80,7 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
     
     def show(self):
         controls = self.makeLayout()
-        self.doModal('main',800,700,'',controls)        
+        self.doModal('main',1150,600,'',controls)        
     
     def makeLayout(self):
         zywz_layout = [
@@ -98,49 +98,39 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
                 {
                     'group': [
                         {'type':'image','name':'picture', '@click':'on_grid_click'},
-                        {'type':'link','name':'title','textColor':'#ff7f00','fontSize':15,'height':0.15, '@click':'on_grid_click'}
+                        {'type':'link','name':'title','textColor':'#ff7f00','fontSize':12,'height':0.15, '@click':'on_grid_click'}
                     ],
                     'dir':'vertical'
                 }
             ]
         ]
         controls = [
+            {'type':'grid','name':'zygrid','itemlayout':zywz_layout,'value':self.spy,'itemheight':30,'itemwidth':60,'height':60},
             {'type':'space','height':5},
-            {
-                'group':[
-                    {'type':'edit','name':'search_edit','label':'搜索','width':0.4},
-                    {'type':'button','name':'搜索当前站','@click':'onSearch','width':100},
-                    {'type':'button','name':'搜索所有站','@click':'onSearchAll','width':100},
-                    {'type': 'link','value': 'https://github.com/cxrcool/stellar-18zy/issues','name':'问题反馈'},
-                ],
-                'width':1.0,
-                'height':30
-            },
-            {'type':'space','height':10},
-            {
-                'group':[
-                    {'type':'grid','name':'zygrid','itemlayout':zywz_layout,'value':self.spy,'itemheight':30,'itemwidth':80,'width':100},
-                    {'type':'grid','name':'mediaclassgrid','itemlayout':mediaclass_layout,'value':self.mediaclass,'itemheight':30,'itemwidth':60,'width':80},
-                    {'type':'grid','name':'mediagrid','itemlayout':mediagrid_layout,'value':self.medias,'separator':True,'itemheight':240,'itemwidth':150}
-                ]
-            },
+            {'type':'grid','name':'mediaclassgrid','itemlayout':mediaclass_layout,'value':self.mediaclass,'itemheight':30,'itemwidth':60,'height':60},
+            {'type':'space','height':5},
+            {'type':'grid','name':'mediagrid','itemlayout':mediagrid_layout,'value':self.medias,'separator':True,'itemheight':200,'itemwidth':110},
+            
             {'group':
                 [
                     {'type':'space'},
                     {'group':
                         [
+                            {'type':'edit','name':'search_edit','label':'搜索','width':0.3},
+                            {'type':'button','name':'当前站','@click':'onSearch','width':100},
+                            {'type':'button','name':'所有站','@click':'onSearchAll','width':100},
                             {'type':'label','name':'cur_page',':value':'cur_page'},
                             {'type':'link','name':'首页','@click':'onClickFirstPage'},
-                            {'type':'link','name':'上一页','@click':'onClickFormerPage'},
-                            {'type':'link','name':'下一页','@click':'onClickNextPage'},
+                            {'type':'link','name':'上页','@click':'onClickFormerPage'},
+                            {'type':'link','name':'下页','@click':'onClickNextPage'},
                             {'type':'link','name':'末页','@click':'onClickLastPage'},
                             {'type':'label','name':'max_page',':value':'max_page'},
                         ]
-                        ,'width':0.7
+                        ,'width':0.9
                     },
-                    {'type':'space'}
+                    {'type':'space','height':5}
                 ]
-                ,'height':30
+                ,'height':20
             },
             {'type':'space','height':5}
         ]
@@ -167,7 +157,7 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         self.player.updateControlValue('main','mediaclassgrid',self.mediaclass)
         url = self.apiurl + '?ac=list'
         try:
-            res = requests.get(url,timeout = 15,verify=False)
+            res = requests.get(url,timeout = 10,verify=False)
             if res.status_code == 200:
                 if self.apitype == 'json':
                     jsondata = json.loads(res.text, strict = False)
@@ -185,10 +175,10 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
                         self.getPageInfoXML(bs)
             else:
                 if showerror:
-                    self.player and self.player.toast('main','请求失败重试')
+                    self.player and self.player.toast('main','请求失败')
         except:
             if showerror:
-                self.player and self.player.toast('main','请求失败重试')
+                self.player and self.player.toast('main','请求失败')
         self.player.updateControlValue('main','mediaclassgrid',self.mediaclass)
         
     def getMediaList(self,showerror):
@@ -205,7 +195,7 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         if self.pg != '':
             url = url + self.pg
         try:
-            res = requests.get(url,timeout = 15,verify=False)
+            res = requests.get(url,timeout = 10,verify=False)
             if res.status_code == 200:
                 if self.apitype == 'json':
                     jsondata = json.loads(res.text, strict = False)
@@ -230,10 +220,10 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
                     self.getPageInfoXML(bs)
             else:
                 if showerror:
-                    self.player and self.player.toast('main','请求失败重试')
+                    self.player and self.player.toast('main','请求失败')
         except:
             if showerror:
-                self.player and self.player.toast('main','请求失败重试')
+                self.player and self.player.toast('main','请求失败')
         self.player.updateControlValue('main','mediagrid',self.medias)
     
     def on_class_click(self, page, listControl, item, itemControl):
@@ -337,7 +327,7 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         url = zyzapiurl + '?ac=videolist&wd=' + wd + '&pg=' + str(pageindex)
         print(url)
         try:
-            res = requests.get(url,timeout = 15,verify=False)
+            res = requests.get(url,timeout = 10,verify=False)
             if res.status_code == 200:
                 if zyzapitype == "json":
                     jsondata = json.loads(res.text, strict = False)
@@ -381,8 +371,8 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         except:
             return
         if self.searhStop == False:
-            if len(self.medias) < 20:
-                num = 20
+            if len(self.medias) < 40:
+                num = 40
                 if num > len(self.allSearchMedias):
                     num = len(self.allSearchMedias)
                 for i in range(len(self.medias),num):
@@ -390,8 +380,8 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
                     self.medias.append(self.allSearchMedias[i]);
                     self.cur_page = '第1页'
                     self.player.updateControlValue('main','mediagrid',self.medias)
-            self.pagenumbers = len(self.allSearchMedias) // 20
-            if self.pagenumbers * 20 < len(self.allSearchMedias):
+            self.pagenumbers = len(self.allSearchMedias) // 40
+            if self.pagenumbers * 40 < len(self.allSearchMedias):
                 self.pagenumbers = self.pagenumbers + 1
             self.max_page = '共' + str(self.pagenumbers) + '页'
             self.player.updateControlValue('main','mediagrid',self.medias)
@@ -405,7 +395,7 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         
     def onGetMediaPage(self,url,apitype):
         try:
-            res = requests.get(url,timeout = 15,verify=False)
+            res = requests.get(url,timeout = 10,verify=False)
             if res.status_code == 200:
                 if apitype == 'json':
                     jsondata = json.loads(res.text, strict = False)
@@ -508,19 +498,19 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
                     }
                 ],
                 'width':1.0,
-                'height':250
+                'height':460
             },
             {'group':
-                {'type':'grid','name':'xllist','itemlayout':xl_list_layout,'value':mediainfo['source'],'separator':True,'itemheight':30,'itemwidth':120},
-                'height':40
+                {'type':'grid','name':'xllist','itemlayout':xl_list_layout,'value':mediainfo['source'],'separator':True,'itemheight':20,'itemwidth':120},
+                'height':25
             },
             {'type':'space','height':5},
             {'group':
-                {'type':'grid','name':'movielist','itemlayout':movie_list_layout,'value':actmovies,'separator':True,'itemheight':30,'itemwidth':120},
-                'height':200
+                {'type':'grid','name':'movielist','itemlayout':movie_list_layout,'value':actmovies,'separator':True,'itemheight':20,'itemwidth':120},
+                'height':110
             }
         ]
-        result,control = self.doModal(mediainfo['medianame'],750,500,'',controls)
+        result,control = self.doModal(mediainfo['medianame'],1150,600,'',controls)
 
     def updateSearch(self,index):
         print(index)
@@ -530,9 +520,9 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         self.player.updateControlValue('main','mediagrid',self.medias)
         self.pageindex = index
         self.cur_page = '第' + str(self.pageindex) + '页'
-        if len(self.allSearchMedias) >= 20 * (index - 1):
-            idxend = 20 * index
-            idxstart = idxend - 20
+        if len(self.allSearchMedias) >= 40 * (index - 1):
+            idxend = 40 * index
+            idxstart = idxend - 40
             if idxend > len(self.allSearchMedias):
                 idxend = len(self.allSearchMedias)
             for i in range(idxstart,idxend):

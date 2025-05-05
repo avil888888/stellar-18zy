@@ -371,8 +371,8 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         except:
             return
         if self.searhStop == False:
-            if len(self.medias) < 40:
-                num = 40
+            if len(self.medias) < 80:
+                num = 80
                 if num > len(self.allSearchMedias):
                     num = len(self.allSearchMedias)
                 for i in range(len(self.medias),num):
@@ -380,8 +380,8 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
                     self.medias.append(self.allSearchMedias[i]);
                     self.cur_page = '第1页'
                     self.player.updateControlValue('main','mediagrid',self.medias)
-            self.pagenumbers = len(self.allSearchMedias) // 40
-            if self.pagenumbers * 40 < len(self.allSearchMedias):
+            self.pagenumbers = len(self.allSearchMedias) // 80
+            if self.pagenumbers * 80 < len(self.allSearchMedias):
                 self.pagenumbers = self.pagenumbers + 1
             self.max_page = '共' + str(self.pagenumbers) + '页'
             self.player.updateControlValue('main','mediagrid',self.medias)
@@ -520,9 +520,9 @@ class yszfplugin(StellarPlayer.IStellarPlayerPlugin):
         self.player.updateControlValue('main','mediagrid',self.medias)
         self.pageindex = index
         self.cur_page = '第' + str(self.pageindex) + '页'
-        if len(self.allSearchMedias) >= 40 * (index - 1):
-            idxend = 40 * index
-            idxstart = idxend - 40
+        if len(self.allSearchMedias) >= 80 * (index - 1):
+            idxend = 80 * index
+            idxstart = idxend - 80
             if idxend > len(self.allSearchMedias):
                 idxend = len(self.allSearchMedias)
             for i in range(idxstart,idxend):
